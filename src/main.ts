@@ -1,0 +1,56 @@
+import ARMS20190808, * as $ARMS20190808 from "@alicloud/arms20190808";
+import * as $OpenApi from "@alicloud/openapi-client";
+import * as $Util from "@alicloud/tea-util";
+
+// https://next.api.aliyun.com/api/ARMS/2019-08-08/Upload?lang=TYPESCRIPT&params={}
+
+// $OpenApi.Config， 但是可选
+type ClientConfigType = {
+  accessKeyId: string;
+  accessKeySecret: string;
+  regionId?: string;
+  [key: string]: any;
+};
+// $ARMS20190808.UploadRequest
+type UploadConfigType = {
+  fileName: string;
+  file: string;
+  [key: string]: any;
+};
+export default class Client {
+  private client: ARMS20190808;
+  private pid: string;
+
+  constructor(clientConfig: ClientConfigType, pid) {
+    this.createClient(clientConfig);
+    this.pid = pid;
+  }
+  /**
+   * 使用AK&SK初始化账号Client
+   * @param accessKeyId
+   * @param accessKeySecret
+   * @param regionId
+   * @return
+   * @throws Exception
+   */
+  createClient(clientConfig: ClientConfigType): void {
+    let config = new $OpenApi.Config({
+      readTimeout: 10000,
+      ...clientConfig
+    });
+    // 访问的域名
+    config.endpoint = `arms.${clientConfig.regionId || "cn-hangzhou"}.aliyuncs.com`;
+    this.client = new ARMS20190808(config);
+  }
+
+  main(uploadConfig: UploadConfigType): Promise<$ARMS20190808.UploadResponse> {
+    let uploadRequest = new $ARMS20190808.UploadRequest({
+      pid: this.pid,
+      regionId: "cn-hangzhou",
+      version: "1.0.0",
+      ...uploadConfig
+    });
+    let runtime = new $Util.RuntimeOptions({});
+    return this.client.uploadWithOptions(uploadRequest, runtime);
+  }
+}
