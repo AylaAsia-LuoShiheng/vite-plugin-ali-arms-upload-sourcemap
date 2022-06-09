@@ -52,4 +52,4 @@ class Client {
     }
 }
 exports.default = Client;
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=client.js.map

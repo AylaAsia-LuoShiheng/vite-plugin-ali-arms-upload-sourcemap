@@ -1,9 +1,3 @@
 import { Plugin } from "vite";
-declare type ConfigType = {
-    accessKeyId: string;
-    accessKeySecret: string;
-    pid: string;
-    maxRetryTimes?: number;
-};
-export default function pluginConfig({ accessKeyId, accessKeySecret, pid, maxRetryTimes }: ConfigType): Plugin;
-export {};
+import { ConfigType } from "./core/index";
+export default function pluginConfig(config: ConfigType): Plugin;
