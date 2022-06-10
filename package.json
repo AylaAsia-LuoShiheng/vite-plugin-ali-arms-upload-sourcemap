@@ -29,6 +29,6 @@
     "src"
   ],
   "dependencies": {
-    "ali-arms-upload-sourcemap-core": "^1.0.0"
+    "ali-arms-upload-sourcemap-core": "^1.0.1"
   }
 }
