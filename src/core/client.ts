@@ -5,25 +5,29 @@ import * as $Util from "@alicloud/tea-util";
 // https://next.api.aliyun.com/api/ARMS/2019-08-08/Upload?lang=TYPESCRIPT&params={}
 
 // $OpenApi.Config， 但是可选
-type ClientConfigType = {
+export type ClientConfigType = {
   accessKeyId: string;
   accessKeySecret: string;
   regionId?: string;
   [key: string]: any;
 };
-// $ARMS20190808.UploadRequest
-type UploadConfigType = {
+export type UploadFileType = {
   fileName: string;
   file: string;
+};
+
+// $ARMS20190808.UploadRequest
+export type UploadDefaultConfigType = {
+  pid: string;
   [key: string]: any;
 };
 export default class Client {
   private client: ARMS20190808;
-  private pid: string;
+  private uploadDefaultConfig: UploadDefaultConfigType;
 
-  constructor(clientConfig: ClientConfigType, pid) {
+  constructor(clientConfig: ClientConfigType, uploadDefaultConfig: UploadDefaultConfigType) {
     this.createClient(clientConfig);
-    this.pid = pid;
+    this.uploadDefaultConfig = uploadDefaultConfig;
   }
   /**
    * 使用AK&SK初始化账号Client
@@ -43,12 +47,12 @@ export default class Client {
     this.client = new ARMS20190808(config);
   }
 
-  main(uploadConfig: UploadConfigType): Promise<$ARMS20190808.UploadResponse> {
+  main(uploadFile: UploadFileType): Promise<$ARMS20190808.UploadResponse> {
     let uploadRequest = new $ARMS20190808.UploadRequest({
-      pid: this.pid,
       regionId: "cn-hangzhou",
       version: "1.0.0",
-      ...uploadConfig
+      ...this.uploadDefaultConfig,
+      ...uploadFile
     });
     let runtime = new $Util.RuntimeOptions({});
     return this.client.uploadWithOptions(uploadRequest, runtime);

@@ -7,7 +7,9 @@ const utils_1 = require("./utils");
 const client_1 = __importDefault(require("./client"));
 // 兜底， 最大重试次数
 let maxRetryTimesVal = 6;
-function default_1({ accessKeyId, accessKeySecret, pid, maxRetryTimes, disabled }, outDirFinal) {
+function default_1({ clientConfig, uploadDefaultConfig, maxRetryTimes, disabled }, outDirFinal) {
+    const { accessKeyId, accessKeySecret } = clientConfig;
+    const { pid } = uploadDefaultConfig;
     if (!accessKeyId || !accessKeySecret || !pid) {
         console.log("请输入必填项");
         return;
@@ -20,7 +22,7 @@ function default_1({ accessKeyId, accessKeySecret, pid, maxRetryTimes, disabled 
     }
     console.log("start time:", new Date().toISOString());
     const allMapFiles = (0, utils_1.readDir)(outDirFinal).filter(file => file.endsWith(".map"));
-    const uploadClient = new client_1.default({ accessKeyId, accessKeySecret }, pid);
+    const uploadClient = new client_1.default(clientConfig, uploadDefaultConfig);
     // allMapFiles.forEach(file => {
     //   const fileData = readFile(outDirFinal + "/" + file);
     //   uploadClient.main({ fileName: file, file: fileData });
@@ -58,7 +60,7 @@ function default_1({ accessKeyId, accessKeySecret, pid, maxRetryTimes, disabled 
             console.log("wait 5 sec...");
             setTimeout(() => {
                 handleUpload(laterList, 0);
-            }, 1000 * 0);
+            }, 1000 * 5);
         });
     };
     handleUpload(allMapFiles, 0);

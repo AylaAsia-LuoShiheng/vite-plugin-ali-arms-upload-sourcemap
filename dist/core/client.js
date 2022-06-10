@@ -27,9 +27,9 @@ const arms20190808_1 = __importStar(require("@alicloud/arms20190808")), $ARMS201
 const $OpenApi = __importStar(require("@alicloud/openapi-client"));
 const $Util = __importStar(require("@alicloud/tea-util"));
 class Client {
-    constructor(clientConfig, pid) {
+    constructor(clientConfig, uploadDefaultConfig) {
         this.createClient(clientConfig);
-        this.pid = pid;
+        this.uploadDefaultConfig = uploadDefaultConfig;
     }
     /**
      * 使用AK&SK初始化账号Client
@@ -45,8 +45,8 @@ class Client {
         config.endpoint = `arms.${clientConfig.regionId || "cn-hangzhou"}.aliyuncs.com`;
         this.client = new arms20190808_1.default(config);
     }
-    main(uploadConfig) {
-        let uploadRequest = new $ARMS20190808.UploadRequest(Object.assign({ pid: this.pid, regionId: "cn-hangzhou", version: "1.0.0" }, uploadConfig));
+    main(uploadFile) {
+        let uploadRequest = new $ARMS20190808.UploadRequest(Object.assign(Object.assign({ regionId: "cn-hangzhou", version: "1.0.0" }, this.uploadDefaultConfig), uploadFile));
         let runtime = new $Util.RuntimeOptions({});
         return this.client.uploadWithOptions(uploadRequest, runtime);
     }

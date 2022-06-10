@@ -1,8 +1,8 @@
+import { ClientConfigType, UploadDefaultConfigType } from "./client";
 export declare type ConfigType = {
-    accessKeyId: string;
-    accessKeySecret: string;
-    pid: string;
+    clientConfig: ClientConfigType;
+    uploadDefaultConfig: UploadDefaultConfigType;
     maxRetryTimes?: number;
     disabled?: boolean;
 };
-export default function ({ accessKeyId, accessKeySecret, pid, maxRetryTimes, disabled }: ConfigType, outDirFinal: string): void;
+export default function ({ clientConfig, uploadDefaultConfig, maxRetryTimes, disabled }: ConfigType, outDirFinal: string): void;

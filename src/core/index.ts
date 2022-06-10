@@ -1,9 +1,8 @@
 import { readDir, readFile } from "./utils";
-import Client from "./client";
+import Client, { ClientConfigType, UploadDefaultConfigType } from "./client";
 export type ConfigType = {
-  accessKeyId: string;
-  accessKeySecret: string;
-  pid: string;
+  clientConfig: ClientConfigType;
+  uploadDefaultConfig: UploadDefaultConfigType;
   maxRetryTimes?: number;
   disabled?: boolean;
 };
@@ -11,9 +10,11 @@ export type ConfigType = {
 // 兜底， 最大重试次数
 let maxRetryTimesVal = 6;
 export default function (
-  { accessKeyId, accessKeySecret, pid, maxRetryTimes, disabled }: ConfigType,
+  { clientConfig, uploadDefaultConfig, maxRetryTimes, disabled }: ConfigType,
   outDirFinal: string
 ) {
+  const { accessKeyId, accessKeySecret } = clientConfig;
+  const { pid } = uploadDefaultConfig;
   if (!accessKeyId || !accessKeySecret || !pid) {
     console.log("请输入必填项");
     return;
@@ -26,7 +27,7 @@ export default function (
   }
   console.log("start time:", new Date().toISOString());
   const allMapFiles = readDir(outDirFinal).filter(file => file.endsWith(".map"));
-  const uploadClient = new Client({ accessKeyId, accessKeySecret }, pid);
+  const uploadClient = new Client(clientConfig, uploadDefaultConfig);
   // allMapFiles.forEach(file => {
   //   const fileData = readFile(outDirFinal + "/" + file);
   //   uploadClient.main({ fileName: file, file: fileData });
@@ -65,7 +66,7 @@ export default function (
         console.log("wait 5 sec...");
         setTimeout(() => {
           handleUpload(laterList, 0);
-        }, 1000 * 0);
+        }, 1000 * 5);
       });
   };
 
