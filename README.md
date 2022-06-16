@@ -1,3 +1,3 @@
-auto upload source map to ali arms
+已弃。不再更新， 请使用
 
-注意文件大小， 太大了传不上去， 要分包
+https://www.npmjs.com/package/@ali-arms-upload-sourcemap/vite-plugin
